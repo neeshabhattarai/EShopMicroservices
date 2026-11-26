@@ -11,6 +11,10 @@ builder.Services.AddMediatR((c) =>
     c.RegisterServicesFromAssembly(typeof(Program).Assembly);
 });
 builder.Services.AddCarter();
+builder.Services.AddMarten(opts =>
+{
+    opts.Connection(builder.Configuration.GetConnectionString("Default")!);
+}).UseLightweightSessions();
 
 var app = builder.Build();
 
