@@ -13,7 +13,7 @@ public class GetProductByIdEndpoint:ICarterModule
             var result = await sender.Send(new GetProductByIdRequest(id));
             return Results.Ok(result);
             }
-            catch (Exception e)
+            catch (System.Exception e)
             {
              return Results.NotFound(e.Message);
             }
