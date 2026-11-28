@@ -1,4 +1,3 @@
-global using Carter;
 global using MediatR;
 global using Mapster;
 global using FluentValidation;
@@ -12,3 +11,4 @@ global using BuildingBlocks.Logging;
 global using Catalog.Api.Data;
 global using HealthChecks.UI.Client;
 global using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+global using Carter;

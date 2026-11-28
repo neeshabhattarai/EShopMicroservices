@@ -1,0 +1,10 @@
+global using BuildingBlocks;
+global using Carter;
+global using System.ComponentModel.DataAnnotations;
+global using Mapster;
+global using MediatR;
+global using Basket.Api.Models;
+global using Microsoft.AspNetCore.Mvc;
+global using BuildingBlocks.CQRS;
+global using BuildingBlocks.Behaviour;
+global using BuildingBlocks.Logging;

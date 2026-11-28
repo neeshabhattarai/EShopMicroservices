@@ -1,6 +1,6 @@
 namespace Catalog.Api.Products.GetProduct;
 public record GetProductRequest(int Page = 1, int PageSize = 10);
-public class GetProductEndpoints : ICarterModule
+public class GetProductEndpoints :ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
