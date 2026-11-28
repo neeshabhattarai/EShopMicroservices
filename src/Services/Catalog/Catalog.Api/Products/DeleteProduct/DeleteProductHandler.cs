@@ -1,5 +1,6 @@
 using BuildingBlocks;
 using BuildingBlocks.CQRS;
+using Catalog.Api.Exception;
 
 namespace Catalog.Api.Products.DeleteProduct;
 
@@ -12,7 +13,7 @@ public class DeleteProductHandler(IDocumentSession session) : IQueryHandler<Dele
         var product = await session.Query<Models.Products>().FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
         if (product is null)
         {
-            throw new KeyNotFoundException($"Product with id {request.Id} not found");
+            throw new ProductNotFoundException(typeof(Models.Products).Name, request.Id.ToString());
         }
         session.Delete<Models.Products>(product);
         await session.SaveChangesAsync(cancellationToken);

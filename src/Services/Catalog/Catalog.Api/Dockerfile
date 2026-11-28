@@ -1,23 +1,22 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 5283
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
+ENV ASPNETCORE_URLS=http://+:5283
+
+USER app
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG configuration=Release
 WORKDIR /src
 COPY ["src/Services/Catalog/Catalog.Api/Catalog.Api.csproj", "src/Services/Catalog/Catalog.Api/"]
-COPY ["src/BuildingBlocks/BuildingBlocks/BuildingBlocks.csproj", "src/BuildingBlocks/BuildingBlocks/"]
 RUN dotnet restore "src/Services/Catalog/Catalog.Api/Catalog.Api.csproj"
-
 COPY . .
 WORKDIR "/src/src/Services/Catalog/Catalog.Api"
-RUN dotnet build "./Catalog.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "Catalog.Api.csproj" -c $configuration -o /app/build
 
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Catalog.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+ARG configuration=Release
+RUN dotnet publish "Catalog.Api.csproj" -c $configuration -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

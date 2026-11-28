@@ -13,7 +13,7 @@ public class UpdateProductHandler(IDocumentSession docs) : ICommandHandler<Updat
         var product = await docs.LoadAsync<Models.Products>(request.Id, cancellationToken);
         if (product == null)
         {
-            throw new ProductNotFoundException($"Product with id {request.Id} not found");
+            throw new ProductNotFoundException(typeof(Models.Products).Name, request.Id.ToString());
         }
         product.Name = request.Name;
         docs.Store(product);

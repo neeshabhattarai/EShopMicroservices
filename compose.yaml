@@ -1,28 +1,28 @@
-﻿services:
-  catalogdb:
-    image: postgres
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: test
-      POSTGRES_PASSWORD: test
-      POSTGRES_DB: catalog
-    volumes:
-      - postgres_data:/var/lib/postgresql
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
 
-  catalog.api:
-    image: catalog.api
+services:
+  catalogapi:
+    image: catalogapi
     build:
       context: .
       dockerfile: src/Services/Catalog/Catalog.Api/Dockerfile
-    restart: always
+    ports:
+      - 5283:8080
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__Default=Host=catalogdb;Port=5432;Database=catalog;Username=test;Password=test;
+      - ASPNETCORE_URLS=http://+:8080
     depends_on:
       - catalogdb
+  catalogdb:
+    image: postgres:16
     ports:
-      - "8080:8080"
-
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=catalog
+      - CONNECTION_STRING=Host=catalog;Port=5432;Database=catalog;Username=test;Password=test;
+    volumes:
+      - catalogdb_data:/var/lib/postgresql/data
 volumes:
-  postgres_data:
+  catalogdb_data:

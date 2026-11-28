@@ -1,5 +1,6 @@
 using BuildingBlocks;
 using BuildingBlocks.CQRS;
+using Catalog.Api.Exception;
 
 namespace Catalog.Api.Products.GetProductById;
 
@@ -12,7 +13,7 @@ public class GetProductByIdHanlder(IDocumentSession session):IQueryHandler<GetPr
         var product = await session.Query<Models.Products>().FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
         if (product == null)
         {
-            throw new KeyNotFoundException($"Product with id {request.Id} not found");
+            throw new ProductNotFoundException(typeof(Models.Products).Name, request.Id.ToString());
         }
         return new GetProductByIdResponse(product);
     }
